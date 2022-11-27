@@ -19,5 +19,5 @@ from watchlist_app.api import urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('movie/', include(urls)),
+    path('watch/', include(urls)),
 ]
