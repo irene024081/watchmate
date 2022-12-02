@@ -20,4 +20,5 @@ from watchlist_app.api import urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('watch/', include(urls)),
+    path('api-auth/', include('rest_framework.urls'))
 ]

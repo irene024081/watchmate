@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status, mixins, generics, viewsets
+from rest_framework.exceptions import ValidationError
 
 from watchlist_app.models import WatchList, StreamPlatform, Review
 from watchlist_app.api.serializers import (WatchListSerializer, 
@@ -17,8 +18,12 @@ class ReviewList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         pk = self.kwargs.get('pk')
         movie = WatchList.objects.get(pk = pk)
+        review_user = self.request.user
+        review_queryset = Review.objects.filter(watchlist=movie, review_user=review_user)
+        if review_queryset.exists():
+            raise ValidationError("you have already reviewed!")
 
-        serializer.save(watchlist=movie)
+        serializer.save(watchlist=movie, review_user = review_user)
     
         
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -27,7 +32,7 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     def perform_create(self, serializer):
         pk = self.kwargs.get('pk')
         movie = WatchList.objects.get(pk = pk)
-
+ 
         serializer.save(watchlist=movie)
         
 # class ReviewDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
