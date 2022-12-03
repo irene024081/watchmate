@@ -17,6 +17,8 @@ class WatchList(models.Model):
     # is the cd/movie is launched
     active = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
+    avg_rating = models.FloatField(default= 0)
+    num_rating = models.IntegerField(default= 0)
     
     
     def __str__(self):
