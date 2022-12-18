@@ -4,15 +4,21 @@ from rest_framework.views import APIView
 from rest_framework import status, mixins, generics, viewsets
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.throttling import ScopedRateThrottle
+
+
 from watchlist_app.api.permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
 
 from watchlist_app.models import WatchList, StreamPlatform, Review
 from watchlist_app.api.serializers import (WatchListSerializer, 
                                            StreamPlatformSerializer, ReviewSerializer)
+from watchlist_app.api.throtlling import ReviewListThrottle
 
 class ReviewList(generics.ListCreateAPIView):
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    throttle_classes = [ReviewListThrottle]
+
 
     def get_queryset(self):
         pk = self.kwargs['pk']
@@ -41,6 +47,9 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     permission_classes = [IsReviewUserOrReadOnly]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'review_detail'
+    
     
     def perform_create(self, serializer):
         pk = self.kwargs.get('pk')
