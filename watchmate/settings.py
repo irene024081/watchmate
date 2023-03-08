@@ -136,15 +136,15 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    # 'DEFAULT_THROTTLE_CLASSES': [
-    #     'rest_framework.throttling.AnonRateThrottle',
-    #     'rest_framework.throttling.UserRateThrottle'
-    # ],
+    'DEFAULT_THROTTLE_CLASSES': [
+        #'rest_framework.throttling.AnonRateThrottle',
+        #'rest_framework.throttling.UserRateThrottle'
+    ],
     'DEFAULT_THROTTLE_RATES': {
         'anon': '1/day',
         'user': '3/day',
-        'review_list': '3/day',
-        'review_detail': '3/day',
+        'review_list': '10/day',
+        'review_detail': '10/day',
     }
     
 }
